@@ -42,15 +42,18 @@ namespace Football_Draft
                 { 22900300,19000590,18000222,12999999,10000100},
                 { 23000000,20000000,19400000,16200700,15900000}};
 
-            string userInput;
+            int userInput;
             int row, column;
             int budget = 65000000;
             List<String> draftList = new List<String>();
 
             Table(position, placement, players, colleges, salaries);
-            Console.WriteLine("Enter the name of the position you wish to draft");
-            userInput = Console.ReadLine();
+            Console.WriteLine("Enter the number of the position you wish to draft");
+            userInput = Int32.Parse(Console.ReadLine());
+            userInput = userInput - 1;
             Console.Clear();
+            PlayerSelection(placement, players, colleges, salaries, userInput);
+            Console.ReadKey();
         }
         public static void Table(string[] rowHeads, string[] coulmnHeads, string[,] dataSet1, string[,] dataSet2, int[,] dataSet3)
         {
@@ -72,7 +75,7 @@ namespace Football_Draft
             for (var x = 0; x < dataSet1.GetLength(0); x++)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write("{0,-20}", $"{rowHeads[x]}:");
+                Console.Write("{0,-20}", $"1) {rowHeads[x]}:");
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 for (var w = 0; w < dataSet1.GetLength(1); w++)
                 {
@@ -99,9 +102,47 @@ namespace Football_Draft
 
             }
         }
-    }
-}
+        public static void PlayerSelection(string[] coulmnHeads, string[,] dataSet1, string[,] dataSet2, int[,] dataSet3, int input)
+        {
+            for (var z = 0; z < coulmnHeads.GetLength(0); z++)
+            {
+                if (z <= 2)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+                if (z >= 3)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                }
+                Console.Write("{0,-25}", coulmnHeads[z]);
+            }
 
+            Console.WriteLine("\n");
+               
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                for (var w = 0; w < dataSet1.GetLength(1); w++)
+                {
+                    Console.Write("{0,-25}", dataSet1[input, w]);
+                }
+
+                Console.WriteLine("\n");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                for (var w = 0; w < dataSet2.GetLength(1); w++)
+                {
+                    Console.Write("{0,-25}", dataSet2[input, w]);
+                }
+
+                Console.WriteLine("\n");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                for (var w = 0; w < dataSet3.GetLength(1); w++)
+                {
+                    Console.Write("{0,-25}", String.Format("{0:c}", dataSet3[input, w]));
+                }
+
+                Console.WriteLine("\n\n");
+            }
+        }
+    }
 
 
 
