@@ -8,7 +8,7 @@ namespace Football_Draft
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             string[] position = { "Quarterback", "Running Back", "Wide-Receiver",
             "Defensive Lineman", "Defensive-Back", "Tight Ends", "Line-Backer's",
@@ -24,7 +24,7 @@ namespace Football_Draft
                 {"Roquan Smith", "Tremaine Edmunds", "Kendall Joseph", "Dorian O'Daniel", "Malik Jefferson"},
                 {"Orlando Brown", "Kolton Miller", "Chukwuma Okorafor", "Connor Williams", "Mike McGlinchey" } };
 
-            string[,] collages = {{"(Oklahoma State)", "(Louisville)", "(UCLA)", "(Southern California)", "(Oklahoma)" },
+            string[,] colleges = {{"(Oklahoma State)", "(Louisville)", "(UCLA)", "(Southern California)", "(Oklahoma)" },
                 { "(Penn State)", "(LSU)", "(Stanford)", "(Southern California)", "(Alabama)" },
                 { "(Southern Methodist)", "(Oklahoma State)", "(Oklahoma State)", "(Memphis)", "(Alabama)" },
                 { "(Michigan)", "(Washington)", "(Florida)", "(Alabama)", "(Stanford)" },
@@ -44,44 +44,64 @@ namespace Football_Draft
 
             string userInput;
             int row, column;
+            int budget = 65000000;
             List<String> draftList = new List<String>();
 
+            Table(position, placement, players, colleges, salaries);
+            Console.WriteLine("Enter the name of the position you wish to draft");
+            userInput = Console.ReadLine();
+            Console.Clear();
+        }
+        public static void Table(string[] rowHeads, string[] coulmnHeads, string[,] dataSet1, string[,] dataSet2, int[,] dataSet3)
+        {
             Console.Write("                    ");
-            for (var z = 0; z < placement.GetLength(0); z++)
+            for (var z = 0; z < coulmnHeads.GetLength(0); z++)
             {
-                Console.Write("{0,-25}", placement[z]);
+                if (z <= 2)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+                if (z >= 3)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                }
+                Console.Write("{0,-25}", coulmnHeads[z]);
             }
 
             Console.WriteLine("\n");
-            for (var x = 0; x < players.GetLength(0); x++)
+            for (var x = 0; x < dataSet1.GetLength(0); x++)
             {
-                Console.Write("{0,-20}", $"{position[x]}:");
-                for (var w = 0; w < players.GetLength(1); w++)
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("{0,-20}", $"{rowHeads[x]}:");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                for (var w = 0; w < dataSet1.GetLength(1); w++)
                 {
-                    Console.Write("{0,-25}", players[x, w]); 
+                    Console.Write("{0,-25}", dataSet1[x, w]);
                 }
 
                 Console.WriteLine("\n");
                 Console.Write("                    ");
-                for (var w = 0; w < collages.GetLength(1); w++)
+                Console.ForegroundColor = ConsoleColor.Blue;
+                for (var w = 0; w < dataSet2.GetLength(1); w++)
                 {
-                    Console.Write("{0,-25}", collages[x, w]);
+                    Console.Write("{0,-25}", dataSet2[x, w]);
                 }
 
                 Console.WriteLine("\n");
                 Console.Write("                    ");
-                for (var w = 0; w < salaries.GetLength(1); w++)
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                for (var w = 0; w < dataSet3.GetLength(1); w++)
                 {
-                    Console.Write("{0,-25}", salaries[x, w]);
+                    Console.Write("{0,-25}", String.Format("{0:c}", dataSet3[x, w]));
                 }
 
                 Console.WriteLine("\n\n");
-            }
-                
-                Console.ReadKey();
 
             }
         }
     }
+}
+
+
 
 
