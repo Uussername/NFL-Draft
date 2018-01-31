@@ -11,9 +11,9 @@ namespace Football_Draft
     {
         static void Main()
         {
-            string[] position = { "Quarterback", "Running Back", "Wide-Receiver",
-            "Defensive Lineman", "Defensive-Back", "Tight Ends", "Line-Backer's",
-            "Offensive Tackles"};
+            string[] position = { "Quarterback", "Running Back", "Wide Receiver",
+            "Defensive Lineman", "Defensive Back", "Tight End", "Linebacker",
+            "Offensive Tackle"};
 
             string[] placement = { "The Best", "2nd Best", "3rd Best", "4th Best", "5th Best" };
 
@@ -47,10 +47,13 @@ namespace Football_Draft
             List<String> draftListPlayers = new List<String>();
             List<String> draftListCollege = new List<String>();
             List<Int32> draftListSalary = new List<Int32>();
+            List<String> draftListPosition = new List<String>();
 
             string rowInput;
 
             int row, column;
+
+            int counter = 0;
 
             int budget = 95000000;
 
@@ -65,10 +68,9 @@ namespace Football_Draft
                     Console.WriteLine(String.Format("You have {0:c} remaining", budget));
                     if (budget < 10000000)
                     {
-                        Console.Clear();
+                        Drafted(ref draftListPlayers, ref draftListCollege, ref draftListSalary, ref draftListPosition, budget);
                         Console.WriteLine($"You can not afford to draft another player");
-                        Drafted(ref draftListPlayers, ref draftListCollege, ref draftListSalary, budget);
-                        Console.WriteLine("Press any key to continue");
+                        Console.WriteLine("Press any key to exit");
                         Console.ReadKey();
                         return;
                     }
@@ -80,6 +82,7 @@ namespace Football_Draft
                     PlayerSelection(placement, players, colleges, salaries, row);
 
                     ColumnGet(out column);
+                    counter = OptimalCounter(counter, column);
 
                     budget = budget - salaries[row, column];
                     if (budget > 0)
@@ -87,21 +90,39 @@ namespace Football_Draft
                         draftListPlayers.Add(players[row, column]);
                         draftListCollege.Add(colleges[row, column]);
                         draftListSalary.Add(salaries[row, column]);
+                        draftListPosition.Add(position[row]);
                     }
                     else
                     {
-                        Console.WriteLine("You do not have enough budget to draft this player");
+                        budget = budget + salaries[row, column];
+                        Console.WriteLine("You do not have enough budget to draft this player" +
+                            "\nPress any key to continue...");
+                        Console.ReadKey();
                     }
-                    Console.Clear();
                     
-                    Drafted(ref draftListPlayers, ref draftListCollege, ref draftListSalary, budget);
-                    Console.ReadKey();
+                    Drafted(ref draftListPlayers, ref draftListCollege, ref draftListSalary, ref draftListPosition, budget);
+                    Console.WriteLine("\nPress Enter to draft another player, or any other key to quit");
+                    key = Console.ReadKey();
+                    if (key.Key != ConsoleKey.Enter)
+                    {
+                        break;
+                    }
                     Console.Clear();
 
                 }//End of main counted loop
 
-                Drafted(ref draftListPlayers, ref draftListCollege, ref draftListSalary, budget);
+                Drafted(ref draftListPlayers, ref draftListCollege, ref draftListSalary, ref draftListPosition, budget);
+                OptimalDraft(budget, counter);
+
                 Console.WriteLine("\nPress Enter to draft again, or any other key to quit");
+
+                //reseting the program
+                draftListPlayers.Clear();
+                draftListCollege.Clear();
+                draftListSalary.Clear();
+                draftListPosition.Clear();
+                BudgetReset(out budget);
+                counter = 0;
                 key = Console.ReadKey();
 
             }//End of main loop
@@ -118,13 +139,14 @@ namespace Football_Draft
         }//End of Welcome
 
 
-        private static void Drafted(ref List<String> list1, ref List<String> list2, ref List<int> list3,int budget)
+        private static void Drafted(ref List<String> list1, ref List<String> list2, ref List<int> list3, ref List<string> list4, int budget)
         {
+            Console.Clear();
             int i = 0;
             Console.WriteLine("You have Drafted:");
             foreach (string element in list1)
             {  
-                Console.WriteLine($"{list1[i]}, from {list2[i]} with a salary of {list3[i]:c}");
+                Console.WriteLine($"{list1[i]}, a {list4[i]} from {list2[i]} with a salary of {list3[i]:c}");
                 i = i + 1;
             }
             Console.WriteLine($"\nYou have spent {(95000000 - budget):c}");
@@ -167,6 +189,40 @@ namespace Football_Draft
             input = input - 1;
             return input;
         }//End of ColumnGet
+
+        private static int OptimalCounter(int count, int column)
+        {
+            if (column == 0)
+            {
+                count = count + 1;
+            }
+            if (column == 1)
+            {
+                count = count + 2;
+            }
+            if (column == 2)
+            {
+                count = count + 4;
+            }
+            return count;
+        }
+
+
+        private static void OptimalDraft(int budget, int counter)
+        {
+            if (budget > 30000000 && counter == 7)
+            {
+                Console.WriteLine("You Have preformed an optimal draft!");
+                return;
+            }
+        } //End of Optimal Draft
+
+
+        private static int BudgetReset(out int moneyz)
+        {
+            moneyz = 95000000;
+            return moneyz;
+        }//End of BudgetReset
 
 
         private static void Table(ref string[] rowHeads, ref string[] coulmnHeads, ref string[,] dataSet1, ref string[,] dataSet2, ref int[,] dataSet3)
@@ -260,7 +316,12 @@ namespace Football_Draft
             return;
             }//End of PlayerSelection
         }
+    class Draftimafied
+    {
+
     }
+    }
+
 
 
 
