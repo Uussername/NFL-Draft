@@ -143,7 +143,7 @@ namespace Football_Draft
             Console.WriteLine("You have Drafted:");
             foreach (string element in list1)
             {  
-                Console.WriteLine($"{list1[i]}, a {list4[i]} from {list2[i]} with a salary of {list3[i]:c}");
+                Console.WriteLine($"{list1[i]}, a {list4[i]} from {list2[i]} with a salary of {list3[i]:c}\n");
                 i = i + 1;
             }
             Console.WriteLine($"\nYou have spent {(95000000 - budget):c}");
@@ -299,7 +299,6 @@ namespace Football_Draft
                 }
                 Console.Write("{0,-25}", coulmnHeads[z]); //column headers 1st, 2nd...
             }
-
             Console.WriteLine("\n");
             Loopified(ref dataSet1, ref input);
             Loopified(ref dataSet2, ref input);
@@ -308,8 +307,24 @@ namespace Football_Draft
                 {
                     Console.Write("{0,-25}", String.Format("{0:c}", dataSet3[input, w])); //salary
                 }
-
-                Console.WriteLine("\n\n");
+            Console.WriteLine("\n");
+                for (var w = 0; w < dataSet1.GetLength(1); w++)
+                {
+                Console.ForegroundColor = ConsoleColor.Black;
+                if (!list.Contains(dataSet1[input, w]))
+                {  
+                    Console.BackgroundColor = ConsoleColor.Green;
+                    Console.Write("Available                ");
+                }
+                if (list.Contains(dataSet1[input, w]))
+                {
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.Write("Unavailable              ");
+                }
+                Console.BackgroundColor = ConsoleColor.Black;
+            }
+            
+            Console.WriteLine("\n");
             Console.ForegroundColor = ConsoleColor.White;
             return;
             }//End of PlayerSelection
