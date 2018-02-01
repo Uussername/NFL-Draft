@@ -112,15 +112,12 @@ namespace Football_Draft
                 }//End of main counted loop
 
                 Drafted(ref draftListPlayers, ref draftListCollege, ref draftListSalary, ref draftListPosition, budget);
+                Console.WriteLine("These players are your final Draft");
                 OptimalDraft(budget, counter);
-
                 Console.WriteLine("\nPress Enter to draft again, or any other key to quit");
 
-                //reseting the program
-                draftListPlayers.Clear();
-                draftListCollege.Clear();
-                draftListSalary.Clear();
-                draftListPosition.Clear();
+                //reseting the program or cleanup
+                ListReset(ref draftListPlayers, ref draftListCollege, ref draftListSalary, ref draftListPosition);
                 BudgetReset(out budget);
                 counter = 0;
                 key = Console.ReadKey();
@@ -129,7 +126,7 @@ namespace Football_Draft
 
         }//End of Main
 
-
+        //gets stating sentinel value
         public static void Welcome(out ConsoleKeyInfo key)
         {
             Console.WriteLine("Welcome to the NFL Draft!");
@@ -138,7 +135,7 @@ namespace Football_Draft
             key = Console.ReadKey();
         }//End of Welcome
 
-
+        //displays player's name position, college, and salary when drafted
         private static void Drafted(ref List<String> list1, ref List<String> list2, ref List<int> list3, ref List<string> list4, int budget)
         {
             Console.Clear();
@@ -154,7 +151,7 @@ namespace Football_Draft
             return;
         }//End of Drafted
 
-
+        // row string input
         private static int RowGet(out string input, out int output, string[] position)
         {
             TextInfo title = new CultureInfo("en-US", false).TextInfo;
@@ -170,7 +167,7 @@ namespace Football_Draft
             return output;
         } //End of RowGet
 
-
+        // Column number input
         private static int ColumnGet(out int input)
         {
             input = 0;
@@ -190,6 +187,7 @@ namespace Football_Draft
             return input;
         }//End of ColumnGet
 
+        //Counts up for if a player from the 1st, 2nd, and 3rd were picked
         private static int OptimalCounter(int count, int column)
         {
             if (column == 0)
@@ -205,9 +203,9 @@ namespace Football_Draft
                 count = count + 4;
             }
             return count;
-        }
+        }//End of counting
 
-
+        //Checks to see if the counter and budget match for optimal draft
         private static void OptimalDraft(int budget, int counter)
         {
             if (budget > 30000000 && counter == 7)
@@ -217,14 +215,34 @@ namespace Football_Draft
             }
         } //End of Optimal Draft
 
-
+        //resets budget...
         private static int BudgetReset(out int moneyz)
         {
             moneyz = 95000000;
             return moneyz;
         }//End of BudgetReset
 
+        //clears the draft storage lists
+        private static void ListReset(ref List<String> list1, ref List<String> list2, ref List<int> list3, ref List<string> list4)
+        {
+            list1.Clear();
+            list2.Clear();
+            list3.Clear();
+            list4.Clear();
+            return;
+        }
 
+        //loops for table
+        private static void Loopified(ref string [,] data, ref int x)
+        {
+            for (var w = 0; w < data.GetLength(1); w++)
+            {
+                Console.Write("{0,-25}", data[x, w]);
+            }
+            Console.WriteLine("\n");
+        }//Loops for Table and PlayerSelection methods
+
+        //displays entire table of players, college, placement, position, and salary
         private static void Table(ref string[] rowHeads, ref string[] coulmnHeads, ref string[,] dataSet1, ref string[,] dataSet2, ref int[,] dataSet3)
         {
             Console.Write("                    "); //Write column heads, 1st, 2nd, 3rd...
@@ -247,17 +265,9 @@ namespace Football_Draft
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.Write("{0,-20}", $"{rowHeads[x]}:"); // Player's position
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                for (var w = 0; w < dataSet1.GetLength(1); w++)
-                {
-                    Console.Write("{0,-25}", dataSet1[x, w]); // Player's name
-                }
-                Console.WriteLine("\n");
+                Loopified(ref dataSet1, ref x);
                 Console.Write("                    ");
-                for (var w = 0; w < dataSet2.GetLength(1); w++)
-                {
-                    Console.Write("{0,-25}", dataSet2[x, w]); //Player's college
-                }
-                Console.WriteLine("\n");
+                Loopified(ref dataSet2, ref x);
                 Console.Write("                    ");
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 for (var w = 0; w < dataSet3.GetLength(1); w++)
@@ -266,15 +276,14 @@ namespace Football_Draft
                 }
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("\n");
-                Console.WriteLine(String.Concat(Enumerable.Repeat("-", 140)));
-                
+                Console.WriteLine(String.Concat(Enumerable.Repeat("-", 140))); 
             };
             
             return;
 
         }//End of Table
 
-
+        //displays a single row organized by what position they play
         private static void PlayerSelection(string[] coulmnHeads, string[,] dataSet1, string[,] dataSet2, int[,] dataSet3, int input)
         {
             for (var z = 0; z < coulmnHeads.GetLength(0); z++)
@@ -291,21 +300,10 @@ namespace Football_Draft
             }
 
             Console.WriteLine("\n");
-               
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                for (var w = 0; w < dataSet1.GetLength(1); w++)
-                {
-                    Console.Write("{0,-25}", dataSet1[input, w]); //names
-                }
-
-                Console.WriteLine("\n");
-                for (var w = 0; w < dataSet2.GetLength(1); w++)
-                {
-                    Console.Write("{0,-25}", dataSet2[input, w]); //college
-                }
-
-                Console.WriteLine("\n");
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Loopified(ref dataSet1, ref input);
+            Loopified(ref dataSet2, ref input);
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
                 for (var w = 0; w < dataSet3.GetLength(1); w++)
                 {
                     Console.Write("{0,-25}", String.Format("{0:c}", dataSet3[input, w])); //salary
@@ -316,10 +314,6 @@ namespace Football_Draft
             return;
             }//End of PlayerSelection
         }
-    class Draftimafied
-    {
-
-    }
     }
 
 
