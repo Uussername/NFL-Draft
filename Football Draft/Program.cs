@@ -79,13 +79,13 @@ namespace Football_Draft
 
                     Console.Clear();
 
-                    PlayerSelection(placement, players, colleges, salaries, row);
+                    PlayerSelection(placement, players, colleges, salaries, row, ref draftListPlayers);
 
                     ColumnGet(out column);
                     counter = OptimalCounter(counter, column);
 
                     budget = budget - salaries[row, column];
-                    if (budget > 0)
+                    if (budget > 0 && (!draftListPlayers.Contains(players[row, column])))
                     {
                         draftListPlayers.Add(players[row, column]);
                         draftListCollege.Add(colleges[row, column]);
@@ -95,7 +95,7 @@ namespace Football_Draft
                     else
                     {
                         budget = budget + salaries[row, column];
-                        Console.WriteLine("You do not have enough budget to draft this player" +
+                        Console.WriteLine("You do not have enough budget to draft this player or have already drafted this player" +
                             "\nPress any key to continue...");
                         Console.ReadKey();
                     }
@@ -235,15 +235,17 @@ namespace Football_Draft
         //loops for table
         private static void Loopified(ref string [,] data, ref int x)
         {
+            Console.ForegroundColor = ConsoleColor.Magenta;
             for (var w = 0; w < data.GetLength(1); w++)
-            {
+            { 
                 Console.Write("{0,-25}", data[x, w]);
             }
             Console.WriteLine("\n");
         }//Loops for Table and PlayerSelection methods
 
         //displays entire table of players, college, placement, position, and salary
-        private static void Table(ref string[] rowHeads, ref string[] coulmnHeads, ref string[,] dataSet1, ref string[,] dataSet2, ref int[,] dataSet3)
+        private static void Table(ref string[] rowHeads, ref string[] coulmnHeads, ref string[,] dataSet1,
+            ref string[,] dataSet2, ref int[,] dataSet3)
         {
             Console.Write("                    "); //Write column heads, 1st, 2nd, 3rd...
             for (var z = 0; z < coulmnHeads.GetLength(0); z++)
@@ -264,7 +266,6 @@ namespace Football_Draft
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.Write("{0,-20}", $"{rowHeads[x]}:"); // Player's position
-                Console.ForegroundColor = ConsoleColor.Magenta;
                 Loopified(ref dataSet1, ref x);
                 Console.Write("                    ");
                 Loopified(ref dataSet2, ref x);
@@ -284,7 +285,7 @@ namespace Football_Draft
         }//End of Table
 
         //displays a single row organized by what position they play
-        private static void PlayerSelection(string[] coulmnHeads, string[,] dataSet1, string[,] dataSet2, int[,] dataSet3, int input)
+        private static void PlayerSelection(string[] coulmnHeads, string[,] dataSet1, string[,] dataSet2, int[,] dataSet3, int input, ref List<String> list)
         {
             for (var z = 0; z < coulmnHeads.GetLength(0); z++)
             {
@@ -300,7 +301,6 @@ namespace Football_Draft
             }
 
             Console.WriteLine("\n");
-            Console.ForegroundColor = ConsoleColor.Magenta;
             Loopified(ref dataSet1, ref input);
             Loopified(ref dataSet2, ref input);
             Console.ForegroundColor = ConsoleColor.DarkGreen;
