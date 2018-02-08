@@ -239,6 +239,7 @@ namespace Football_Draft
             {
                 Console.Write("{0,-25}", data[x, w]);
             }
+            Console.WriteLine();
         }//Loops for Table and PlayerSelection methods
 
         //displays entire table of players, college, placement, position, and salary
@@ -258,7 +259,7 @@ namespace Football_Draft
                 Console.Write("{0,-25}", coulmnHeads[z]);
             }
 
-            Console.WriteLine("\n");
+            Console.WriteLine();
             for (var x = 0; x < dataSet1.GetLength(0); x++)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -274,7 +275,7 @@ namespace Football_Draft
                     Console.Write("{0,-25}", String.Format("{0:c}", dataSet3[x, w])); //Player's salary
                 }
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("\n");
+                Console.WriteLine();
                 Console.WriteLine(String.Concat(Enumerable.Repeat("-", 140))); 
             };
             
