@@ -79,13 +79,13 @@ namespace Football_Draft
 
                     Console.Clear();
 
-                    PlayerSelection(placement, players, colleges, salaries, row, ref draftListPlayers);
+                    PlayerSelection(placement, players, colleges, salaries, row);
 
                     ColumnGet(out column);
                     counter = OptimalCounter(counter, column);
 
                     budget = budget - salaries[row, column];
-                    if (budget > 0 && (!draftListPlayers.Contains(players[row, column])))
+                    if (budget > 0)
                     {
                         draftListPlayers.Add(players[row, column]);
                         draftListCollege.Add(colleges[row, column]);
@@ -95,7 +95,7 @@ namespace Football_Draft
                     else
                     {
                         budget = budget + salaries[row, column];
-                        Console.WriteLine("You do not have enough budget to draft this player or have already drafted this player" +
+                        Console.WriteLine("You do not have enough budget to draft this player" +
                             "\nPress any key to continue...");
                         Console.ReadKey();
                     }
@@ -143,7 +143,7 @@ namespace Football_Draft
             Console.WriteLine("You have Drafted:");
             foreach (string element in list1)
             {  
-                Console.WriteLine($"{list1[i]}, a {list4[i]} from {list2[i]} with a salary of {list3[i]:c}\n");
+                Console.WriteLine($"{list1[i]}, a {list4[i]} from {list2[i]} with a salary of {list3[i]:c}");
                 i = i + 1;
             }
             Console.WriteLine($"\nYou have spent {(95000000 - budget):c}");
@@ -196,11 +196,11 @@ namespace Football_Draft
             }
             if (column == 1)
             {
-                count = count + 2;
+                count = count + 1;
             }
             if (column == 2)
             {
-                count = count + 4;
+                count = count + 1;
             }
             return count;
         }//End of counting
@@ -208,7 +208,7 @@ namespace Football_Draft
         //Checks to see if the counter and budget match for optimal draft
         private static void OptimalDraft(int budget, int counter)
         {
-            if (budget > 30000000 && counter == 7)
+            if (budget > 30000000 && counter == 3)
             {
                 Console.WriteLine("You Have preformed an optimal draft!");
                 return;
@@ -235,17 +235,14 @@ namespace Football_Draft
         //loops for table
         private static void Loopified(ref string [,] data, ref int x)
         {
-            Console.ForegroundColor = ConsoleColor.Magenta;
             for (var w = 0; w < data.GetLength(1); w++)
-            { 
+            {
                 Console.Write("{0,-25}", data[x, w]);
             }
-            Console.WriteLine("\n");
         }//Loops for Table and PlayerSelection methods
 
         //displays entire table of players, college, placement, position, and salary
-        private static void Table(ref string[] rowHeads, ref string[] coulmnHeads, ref string[,] dataSet1,
-            ref string[,] dataSet2, ref int[,] dataSet3)
+        private static void Table(ref string[] rowHeads, ref string[] coulmnHeads, ref string[,] dataSet1, ref string[,] dataSet2, ref int[,] dataSet3)
         {
             Console.Write("                    "); //Write column heads, 1st, 2nd, 3rd...
             for (var z = 0; z < coulmnHeads.GetLength(0); z++)
@@ -266,6 +263,7 @@ namespace Football_Draft
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.Write("{0,-20}", $"{rowHeads[x]}:"); // Player's position
+                Console.ForegroundColor = ConsoleColor.Magenta;
                 Loopified(ref dataSet1, ref x);
                 Console.Write("                    ");
                 Loopified(ref dataSet2, ref x);
@@ -285,7 +283,7 @@ namespace Football_Draft
         }//End of Table
 
         //displays a single row organized by what position they play
-        private static void PlayerSelection(string[] coulmnHeads, string[,] dataSet1, string[,] dataSet2, int[,] dataSet3, int input, ref List<String> list)
+        private static void PlayerSelection(string[] coulmnHeads, string[,] dataSet1, string[,] dataSet2, int[,] dataSet3, int input)
         {
             for (var z = 0; z < coulmnHeads.GetLength(0); z++)
             {
@@ -299,7 +297,9 @@ namespace Football_Draft
                 }
                 Console.Write("{0,-25}", coulmnHeads[z]); //column headers 1st, 2nd...
             }
+
             Console.WriteLine("\n");
+            Console.ForegroundColor = ConsoleColor.Magenta;
             Loopified(ref dataSet1, ref input);
             Loopified(ref dataSet2, ref input);
             Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -307,24 +307,8 @@ namespace Football_Draft
                 {
                     Console.Write("{0,-25}", String.Format("{0:c}", dataSet3[input, w])); //salary
                 }
-            Console.WriteLine("\n");
-                for (var w = 0; w < dataSet1.GetLength(1); w++)
-                {
-                Console.ForegroundColor = ConsoleColor.Black;
-                if (!list.Contains(dataSet1[input, w]))
-                {  
-                    Console.BackgroundColor = ConsoleColor.Green;
-                    Console.Write("Available                ");
-                }
-                if (list.Contains(dataSet1[input, w]))
-                {
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.Write("Unavailable              ");
-                }
-                Console.BackgroundColor = ConsoleColor.Black;
-            }
-            
-            Console.WriteLine("\n");
+
+                Console.WriteLine("\n\n");
             Console.ForegroundColor = ConsoleColor.White;
             return;
             }//End of PlayerSelection
